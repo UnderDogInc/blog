@@ -1,0 +1,5 @@
+export { default as UiCard } from './UiCard.vue'
+export { default as UiImage } from './UiImage.vue'
+export { default as UiPagination } from './UiPagination.vue'
+export { default as AppLogo } from './AppLogo.vue'
+export * from './icons'

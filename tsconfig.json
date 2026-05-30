@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./apps/blog" },
+    { "path": "./apps/writer" },
+    { "path": "./apps/resto" },
+    { "path": "./layers/admin" },
+    { "path": "./layers/blog" },
+    { "path": "./layers/shared" }
+  ]
+}

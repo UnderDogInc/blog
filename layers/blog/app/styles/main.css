@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@source "../";
+@source "../../../shared/app";
+
+@plugin "@tailwindcss/typography";
+
+@import "../../../shared/app/styles/daisyui-theme.css";
+@import "../../../shared/app/styles/custom.css";
