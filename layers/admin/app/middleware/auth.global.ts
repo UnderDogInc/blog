@@ -1,3 +1,5 @@
+import { useSession } from '~/entities/session'
+
 export default defineNuxtRouteMiddleware(async (to) => {
   if (to.path === '/login' || to.path.startsWith('/login/')) {
     return

@@ -57,7 +57,8 @@ export default defineNuxtConfig({
           content:
             'Практические материалы о веб-разработке, дизайне и продуктивности — для профессионалов и начинающих.'
         }
-      ]
+      ],
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]
     }
   }
 })

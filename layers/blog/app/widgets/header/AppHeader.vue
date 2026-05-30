@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AppLogo, ChatIcon } from '#shared/ui'
+import { BLOG_CONSULTATION_MAILTO } from '~/shared/constants/contact'
 import AppThemeToggle from '../theme/AppThemeToggle.vue'
 </script>
 
@@ -25,14 +26,14 @@ import AppThemeToggle from '../theme/AppThemeToggle.vue'
 
         <div class="flex items-center gap-1 sm:gap-2">
           <AppThemeToggle />
-          <NuxtLink
-            to="/consultation"
+          <a
+            :href="BLOG_CONSULTATION_MAILTO"
             class="btn btn-primary btn-sm sm:btn-md gap-2 rounded-full font-semibold shadow-md shadow-primary/25"
-            aria-label="Заказать консультацию"
+            aria-label="Написать на почту для консультации"
           >
             <ChatIcon class="size-4 shrink-0" />
             <span class="hidden sm:inline">Консультация</span>
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </div>

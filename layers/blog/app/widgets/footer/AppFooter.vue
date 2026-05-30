@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AppLogo, TelegramIcon, VkIcon, InstagramIcon } from '#shared/ui'
+import { BLOG_CONSULTATION_MAILTO } from '~/shared/constants/contact'
 
 const year = new Date().getFullYear()
 </script>
@@ -25,7 +26,7 @@ const year = new Date().getFullYear()
             Блог о веб-разработке, дизайне и продуктивности — для профессионалов и тех, кто только
             начинает путь.
           </p>
-          <nav aria-label="Соцсети">
+          <nav v-if="false" aria-label="Соцсети">
             <ul class="flex gap-2">
               <li>
                 <a
@@ -64,7 +65,11 @@ const year = new Date().getFullYear()
           </nav>
         </section>
 
-        <nav class="md:col-span-5 md:justify-self-end" aria-label="Навигация в подвале">
+        <nav
+          v-if="false"
+          class="md:col-span-5 md:justify-self-end"
+          aria-label="Навигация в подвале"
+        >
           <h4 class="font-semibold text-sm uppercase tracking-wider text-base-content/50 mb-4">
             Разделы
           </h4>
@@ -80,7 +85,10 @@ const year = new Date().getFullYear()
               </a>
             </li>
             <li>
-              <a href="#" class="link link-hover text-base-content/70 hover:text-primary">
+              <a
+                :href="BLOG_CONSULTATION_MAILTO"
+                class="link link-hover text-base-content/70 hover:text-primary"
+              >
                 Контакты
               </a>
             </li>
