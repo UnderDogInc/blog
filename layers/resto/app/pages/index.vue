@@ -4,7 +4,8 @@ import photo2 from '~/assets/Frame60.png'
 import photo3 from '~/assets/Frame61.png'
 
 const config = useRuntimeConfig()
-const siteUrl = config.public.siteUrl
+const siteUrl = config.public.siteUrl || 'https://resto.rassvet.click'
+const ogImage = `${siteUrl.replace(/\/$/, '')}/og-cover.svg`
 
 useHead({
   title: 'RestoPro — Ваш сайт для доставки и CRM система',
@@ -12,13 +13,34 @@ useHead({
   meta: [
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { name: 'description', content: 'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель с использованием современных технологий. SEO-оптимизировано, быстрое, адаптивное. Запустите за 3 дня!' },
-    { name: 'keywords', content: 'сайт для ресторана, доставка еды, админ панель ресторана, онлайн заказ еды, resto pro, rassvet' },
-    { property: 'og:title', content: 'RestoPro — Сайт + Админка для Ресторана Доставки' },
-    { property: 'og:description', content: 'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель с использованием современных технологий' },
+    {
+      name: 'description',
+      content:
+        'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель. SEO-оптимизировано, быстрое, адаптивное. Запуск за 7 дней!'
+    },
+    {
+      name: 'keywords',
+      content:
+        'сайт для ресторана, доставка еды, админ панель ресторана, онлайн заказ еды, resto pro, rassvet'
+    },
+    { property: 'og:site_name', content: 'RestoPro' },
+    { property: 'og:title', content: 'RestoPro — Сайт + CRM для ресторана доставки' },
+    {
+      property: 'og:description',
+      content:
+        'Готовое решение для ресторанов: сайт доставки + админ-панель. Запуск за 7 дней.'
+    },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: siteUrl },
+    { property: 'og:image', content: ogImage },
+    { property: 'og:locale', content: 'ru_RU' },
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'RestoPro — Сайт + CRM для ресторана доставки' },
+    {
+      name: 'twitter:description',
+      content: 'Готовое решение для ресторанов: сайт доставки + админ-панель. Запуск за 7 дней.'
+    },
+    { name: 'twitter:image', content: ogImage },
     { name: 'theme-color', content: '#FF6B35' }
   ],
   link: [

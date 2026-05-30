@@ -56,7 +56,16 @@ export default defineNuxtConfig({
           name: 'description',
           content:
             'Практические материалы о веб-разработке, дизайне и продуктивности — для профессионалов и начинающих.'
-        }
+        },
+        { property: 'og:site_name', content: 'Rassvet' },
+        {
+          property: 'og:description',
+          content:
+            'Практические материалы о веб-разработке, дизайне и продуктивности — для профессионалов и начинающих.'
+        },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:locale', content: 'ru_RU' },
+        { name: 'twitter:card', content: 'summary_large_image' }
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]
     }

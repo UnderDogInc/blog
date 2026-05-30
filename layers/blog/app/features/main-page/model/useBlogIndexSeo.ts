@@ -4,6 +4,7 @@ import {
   buildItemListJsonLd,
   buildWebSiteJsonLd
 } from '../../../shared/seo/json-ld'
+import { resolveOgImage, resolveSiteOrigin } from '../../../shared/seo/resolveSeo'
 
 export function useBlogIndexSeo(options: {
   activeCategory: ComputedRef<{ name: string; key: string } | null>
@@ -14,7 +15,9 @@ export function useBlogIndexSeo(options: {
   const config = useRuntimeConfig()
   const toMediaUrl = useResolveMediaUrl()
 
-  const siteOrigin = computed(() => config.public.siteUrl.replace(/\/$/, ''))
+  const siteOrigin = computed(() =>
+    resolveSiteOrigin(config.public.siteUrl, config.public.blogUrl)
+  )
 
   const title = computed(() => {
     const parts: string[] = []
@@ -58,7 +61,8 @@ export function useBlogIndexSeo(options: {
 
   const ogImage = computed(() => {
     const preview = options.posts.value[0]?.preview
-    return preview ? toMediaUrl(preview) : undefined
+    const fromPost = preview ? toMediaUrl(preview) : undefined
+    return resolveOgImage(fromPost, siteOrigin.value)
   })
 
   const jsonLd = computed(() => {
@@ -87,10 +91,12 @@ export function useBlogIndexSeo(options: {
     description,
     ogTitle: title,
     ogDescription: description,
+    ogSiteName: SITE_NAME,
     ogType: 'website',
     ogLocale: 'ru_RU',
     ogUrl: canonicalUrl,
     ogImage,
+    ogImageAlt: title,
     twitterCard: 'summary_large_image',
     twitterTitle: title,
     twitterDescription: description,
