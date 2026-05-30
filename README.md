@@ -8,7 +8,7 @@
 | Writer (админка) | `writer.domain.com` | 3001     | `pnpm dev:writer` |
 | Resto (лендинг)  | `resto.domain.com`  | 3002     | `pnpm dev:resto`  |
 | unknow (лендинг) | `*.domain.com`      | 300*     | `pnpm dev:*`      |
-_*unknow - идея в том, что это визитка с формой их может быть n_
+
 ## Быстрый старт
 
 ```bash
@@ -65,7 +65,7 @@ layers/
 
 По умолчанию `NUXT_PUBLIC_API_BASE=/api` — не меняй на `http://localhost:4000/api` в dev, иначе writer/blog на других портах получат CORS-ошибку.
 
-## Форма обратной связи Nuxt server + SMTP (ВАЖНО ЭТА ЧАСТЬ БЫЛА ЖЕСТКО ЗАВАЙБКОЖЕНА, ПОЭТОМУ ЗА КАЧЕСТВО ВООБЩЕ НЕ РУЧАЮСЬ)
+## Форма обратной связи (Nuxt server + SMTP)
 
 Отправка заявок на почту через **Nitro** (`layers/shared/server/api/contact.post.ts`). Nest и отдельный backend не нужны — SMTP-настройки читаются из `.env` в корне monorepo.
 
@@ -216,7 +216,7 @@ const {
 | `NUXT_CONTACT_SMTP_SECURE` | `false` для порта 587 |
 | `NUXT_CONTACT_SMTP_USER` | логин SMTP |
 | `NUXT_CONTACT_SMTP_PASS` | пароль приложения |
-| `NUXT_CONTACT_TO` | получатель |
+| `NUXT_CONTACT_TO` | получатель (по умолчанию) |
 | `NUXT_CONTACT_FROM` | адрес From (по умолчанию = SMTP user) |
 | `NUXT_CONTACT_FROM_NAME` | имя отправителя в письме |
 | `NUXT_CONTACT_SITE_NAME` | fallback темы, если не задано в layer |
@@ -231,7 +231,7 @@ NUXT_CONTACT_SMTP_PORT=587
 NUXT_CONTACT_SMTP_SECURE=false
 NUXT_CONTACT_SMTP_USER=bot@mail.ru
 NUXT_CONTACT_SMTP_PASS=app-password
-NUXT_CONTACT_TO=your@mail.com
+NUXT_CONTACT_TO=your@mail.ru
 NUXT_CONTACT_FROM=bot@mail.ru
 NUXT_CONTACT_FROM_NAME=My Bot
 ```
@@ -241,8 +241,8 @@ NUXT_CONTACT_FROM_NAME=My Bot
 ### Dev
 
 ```bash
-cp .env.example .env   # заполни SMTP
-pnpm dev:resto         # или dev:food-man
+cp .env.example .env
+pnpm dev:resto
 ```
 
 Проверка без UI:
@@ -285,32 +285,30 @@ NUXT_PUBLIC_API_BASE=/api
 NUXT_CONTACT_SMTP_HOST=smtp.mail.ru
 NUXT_CONTACT_SMTP_PORT=587
 NUXT_CONTACT_SMTP_SECURE=false
-NUXT_CONTACT_SMTP_USER=restoran_bot@mail.ru
+NUXT_CONTACT_SMTP_USER=domain_bot@mail.ru
 NUXT_CONTACT_SMTP_PASS=***
-NUXT_CONTACT_TO=your@mail.com
-NUXT_CONTACT_FROM=restoran_bot@mail.ru
-NUXT_CONTACT_FROM_NAME=RestoPro
+NUXT_CONTACT_TO=your@mail.ru
+NUXT_CONTACT_FROM=domain_bot@mail.ru
+NUXT_CONTACT_FROM_NAME=YourName
 ```
-
-`NUXT_API_PROXY_TARGET` лендингу **не нужен** — Nest не используется.
 
 #### 3. Запуск
 
 ```bash
-PORT=3002 node apps/resto/.output/server/index.mjs
+PORT=3002 node apps/domain/.output/server/index.mjs
 ```
 
 Или через systemd / PM2:
 
 ```bash
-PORT=3002 NITRO_HOST=127.0.0.1 node apps/resto/.output/server/index.mjs
+PORT=3002 NITRO_HOST=127.0.0.1 node apps/domain/.output/server/index.mjs
 ```
 
 #### 4. Nginx (reverse proxy)
 
 ```nginx
 server {
-  server_name resto.domain.com;
+  server_name domain.com;
 
   location / {
     proxy_pass http://127.0.0.1:3002;
@@ -323,14 +321,14 @@ server {
 }
 ```
 
-`POST https://resto.domain.com/api/contact` обрабатывает Nitro на том же процессе — отдельный API-сервер не нужен.
+`POST https://domain.com/api/contact` обрабатывает Nitro на том же процессе
 
 #### 5. Несколько лендингов
 
 | App | Домен | Порт | `contactForm.siteName` |
 |-----|-------|------|------------------------|
-| resto | `resto.domain.com` | 3002 | RestoPro |
-| food-man | `food.domain.com` | 3003 | Food-man |
+| resto | `1.domain.com` | 3002 | RestoPro |
+| food-man | `2.domain.com` | 3003 | Food-man |
 
 SMTP (`NUXT_CONTACT_*`) может быть общим для всех — в письме будет разный `[siteName]` и поле «Источник» (`runtimeConfig.public.app`).
 
@@ -361,3 +359,87 @@ PORT=3001 node apps/writer/.output/server/index.mjs
 ```
 
 Blog и writer проксируют `/api` на Nest-backend — см. раздел «API в dev». Для лендингов с формой — раздел «Форма обратной связи → Production».
+
+---
+
+## PM2 (production)
+
+Конфиг: `ecosystem.config.cjs` — три процесса после `pnpm build`:
+
+| PM2 name | App | Порт | Nginx → |
+|----------|-----|------|---------|
+| `rassvet-blog` | blog | 3000 | `blog.domain.com` |
+| `rassvet-writer` | writer | 3001 | `writer.domain.com` |
+| `rassvet-resto` | resto | 3002 | `resto.domain.com` |
+
+### Первый запуск на сервере
+
+```bash
+pnpm install
+cp .env.example .env          # SMTP, API, site URLs
+pnpm build                    # или pnpm build:blog && ...
+
+# глобально: npm i -g pm2
+pnpm pm2:start                # поднять все три app
+pnpm pm2:status
+pnpm pm2:logs
+```
+
+Сборка + старт одной командой:
+
+```bash
+pnpm prod
+```
+
+### Управление
+
+```bash
+pnpm pm2:restart    # перезапуск всех
+pnpm pm2:reload     # zero-downtime reload
+pnpm pm2:stop
+pnpm pm2:delete     # убрать из pm2
+
+# один app:
+pm2 restart rassvet-resto
+pm2 logs rassvet-blog
+```
+
+### Env
+
+Общий `.env` в корне подхватывается через `env_file` (SMTP, API и т.д.).
+
+У каждого app свой `NUXT_PUBLIC_SITE_URL` — задаётся в `ecosystem.config.cjs` из переменных:
+
+```env
+NUXT_PUBLIC_BLOG_SITE_URL=https://blog.domain.com
+NUXT_PUBLIC_WRITER_SITE_URL=https://writer.domain.com
+NUXT_PUBLIC_RESTO_SITE_URL=https://resto.domain.com
+```
+
+После изменения `.env` или ecosystem:
+
+```bash
+pnpm pm2:restart
+```
+
+### Автозапуск после reboot
+
+```bash
+pm2 save
+pm2 startup    # выполни команду, которую выведет pm2
+```
+
+### Добавить новый лендинг
+
+1. `pnpm build:food-man`
+2. Добавь в `ecosystem.config.cjs`:
+
+```js
+nuxtApp('food-man', 3003, {
+  NUXT_PUBLIC_SITE_URL: process.env.NUXT_PUBLIC_FOOD_MAN_SITE_URL
+})
+```
+
+3. `pm2 start ecosystem.config.cjs --only rassvet-food-man`
+
+Логи PM2: `logs/pm2/` (в `.gitignore`).
