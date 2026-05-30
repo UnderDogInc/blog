@@ -443,3 +443,12 @@ nuxtApp('food-man', 3003, {
 3. `pm2 start ecosystem.config.cjs --only rassvet-food-man`
 
 Логи PM2: `logs/pm2/` (в `.gitignore`).
+
+### Nginx
+
+Шаблоны vhost: `deploy.example/nginx/` (в git). Рабочие конфиги — локально:
+
+```bash
+cp -R deploy.example deploy   # один раз на машине / сервере
+# правь deploy/nginx/*.conf под себя — папка deploy/ в .gitignore
+```

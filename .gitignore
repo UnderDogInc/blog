@@ -23,3 +23,6 @@ logs/pm2
 .env
 .env.*
 !.env.example
+!.env.production.example
+
+deploy/
