@@ -450,5 +450,9 @@ nuxtApp('food-man', 3003, {
 
 ```bash
 cp -R deploy.example deploy   # один раз на машине / сервере
-# правь deploy/nginx/*.conf под себя — папка deploy/ в .gitignore
+# правь deploy/nginx/*.conf — папка deploy/ в .gitignore
+
+sudo cp deploy/nginx/snippets/rassvet-proxy.conf /etc/nginx/snippets/
+sudo cp deploy/nginx/snippets/websocket-map.conf /etc/nginx/conf.d/
+sudo cp deploy/nginx/*.conf /etc/nginx/sites-available/
 ```
