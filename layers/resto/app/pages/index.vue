@@ -2,6 +2,9 @@
 import photo1 from '~/assets/Frame59.png'
 import photo2 from '~/assets/Frame60.png'
 import photo3 from '~/assets/Frame61.png'
+import casePhoto1 from '~/assets/Group 57.jpg'
+import casePhoto2 from '~/assets/Group 58.jpg'
+import casePhoto3 from '~/assets/Group 59.jpg'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://resto.rassvet.click'
@@ -16,36 +19,31 @@ useHead({
     {
       name: 'description',
       content:
-        'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель. SEO-оптимизировано, быстрое, адаптивное. Запуск за 7 дней!'
+        'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель с использованием современных технологий. SEO-оптимизировано, быстрое, адаптивное. Запустите за 3 дня!'
     },
     {
       name: 'keywords',
       content:
         'сайт для ресторана, доставка еды, админ панель ресторана, онлайн заказ еды, resto pro, rassvet'
     },
-    { property: 'og:site_name', content: 'RestoPro' },
-    { property: 'og:title', content: 'RestoPro — Сайт + CRM для ресторана доставки' },
+    { property: 'og:title', content: 'RestoPro — Сайт + Админка для Ресторана Доставки' },
     {
       property: 'og:description',
       content:
-        'Готовое решение для ресторанов: сайт доставки + админ-панель. Запуск за 7 дней.'
+        'Готовое решение для ресторанов: современный сайт доставки + мощная админ-панель с использованием современных технологий'
     },
     { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: siteUrl },
-    { property: 'og:image', content: ogImage },
-    { property: 'og:locale', content: 'ru_RU' },
+    { property: 'og:image', content: 'https://restopro.dev/og-image.jpg' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'RestoPro — Сайт + CRM для ресторана доставки' },
-    {
-      name: 'twitter:description',
-      content: 'Готовое решение для ресторанов: сайт доставки + админ-панель. Запуск за 7 дней.'
-    },
-    { name: 'twitter:image', content: ogImage },
     { name: 'theme-color', content: '#FF6B35' }
   ],
   link: [
-    { rel: 'icon', type: 'image/svg+xml', href: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🍕</text></svg>' },
-    { rel: 'canonical', href: siteUrl }
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🍕</text></svg>'
+    },
+    { rel: 'canonical', href: 'https://resto.rassvet.dev' }
   ],
   htmlAttrs: { lang: 'ru' }
 })
@@ -72,17 +70,11 @@ useHead({
 
 const scrollY = ref(0)
 
-onMounted(() => {
-  const onScroll = () => {
+if (process.client) {
+  window.addEventListener('scroll', () => {
     scrollY.value = window.scrollY
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll)
   })
-})
+}
 
 const isMenuOpen = ref(false)
 const activeFaq = ref<number | null>(null)
@@ -99,39 +91,51 @@ const scrollToSection = (id: string) => {
   }
 }
 
-const features = [
-  { icon: photo1,  },
-  { icon: photo2,  },
-  { icon: photo3,  },
-
-]
+const features = [{ icon: photo1 }, { icon: photo2 }, { icon: photo3 }]
 
 const pricing = [
   {
     name: 'Стартуем',
     price: '150 000 ₽',
     desc: 'Идеально для старта',
-    features: ['Сайт доставки', 'Оформление меню, баннеров\n' +
-    '(50 позиций меню, +3 баннера)', 'Админ панель', 'Запуск сайта','Бот для уведомления заказов'],
+    features: [
+      'Сайт доставки',
+      'Оформление меню, баннеров\n' + '(50 позиций меню, +3 баннера)',
+      'Админ панель',
+      'Запуск сайта',
+      'Бот для уведомления заказов'
+    ],
     popular: true
   },
   {
     name: 'Сотрудничество',
     price: 'Обсуждается',
-    desc: 'Разработка любого функционала\n' +
-        'для вашего сайта - CRM',
+    desc: 'Разработка любого функционала\n' + 'для вашего сайта - CRM',
     popular: false
-  },
-
-
+  }
 ]
 
 const faqs = [
-  { q: 'Сколько времени занимает запуск?', a: 'Стандартный запуск занимает 3-5 рабочих дней. Мы настраиваем дизайн под ваш бренд, загружаем меню и подключаем оплату.' },
-  { q: 'Можно ли интегрировать с现有的 POS-системой?', a: 'Да, мы поддерживаем интеграцию с iiko, R-Keeper, FrontPad и другими популярными POS-системами через API.' },
-  { q: 'Нужен ли отдельный хостинг?', a: 'Нет, мы предоставляем хостинг на первый год бесплатно. Далее — 2 000 ₽/мес. Можно разместить и на своём сервере.' },
-  { q: 'Есть ли мобильное приложение?', a: 'В тарифе "Бизнес" и выше сайт превращается в PWA-приложение, которое клиенты могут установить на iPhone/Android.' },
-  { q: 'Как происходит обучение персонала?', a: 'Проводим онлайн-обучение администраторов, предоставляем видео-инструкции и документацию.' }
+  {
+    q: 'Сколько времени занимает запуск?',
+    a: 'Стандартный запуск занимает 3-5 рабочих дней. Мы настраиваем дизайн под ваш бренд, загружаем меню и подключаем оплату.'
+  },
+  {
+    q: 'Можно ли интегрировать с现有的 POS-системой?',
+    a: 'Да, мы поддерживаем интеграцию с iiko, R-Keeper, FrontPad и другими популярными POS-системами через API.'
+  },
+  {
+    q: 'Нужен ли отдельный хостинг?',
+    a: 'Нет, мы предоставляем хостинг на первый год бесплатно. Далее — 2 000 ₽/мес. Можно разместить и на своём сервере.'
+  },
+  {
+    q: 'Есть ли мобильное приложение?',
+    a: 'В тарифе "Бизнес" и выше сайт превращается в PWA-приложение, которое клиенты могут установить на iPhone/Android.'
+  },
+  {
+    q: 'Как происходит обучение персонала?',
+    a: 'Проводим онлайн-обучение администраторов, предоставляем видео-инструкции и документацию.'
+  }
 ]
 
 const stats = [
@@ -151,8 +155,6 @@ const {
   isError,
   submit: sendMessage
 } = useContactForm()
-
-
 </script>
 
 <template>
@@ -175,7 +177,8 @@ const {
           <a @click.prevent="scrollToSection('features')" class="nav__link">Возможности</a>
           <a @click.prevent="scrollToSection('demo')" class="nav__link">Панель</a>
           <a @click.prevent="scrollToSection('pricing')" class="nav__link">Стоимость</a>
-<!--          <a @click.prevent="scrollToSection('faq')" class="nav__link">FAQ</a>-->
+          <a @click.prevent="scrollToSection('case')" class="nav__link">Кейсы</a>
+          <!--          <a @click.prevent="scrollToSection('faq')" class="nav__link">FAQ</a>-->
           <button class="btn btn--small" @click="scrollToSection('contact')">Заказать</button>
         </div>
       </div>
@@ -190,12 +193,12 @@ const {
       <div class="container hero__content">
         <div class="hero__badge">🔥 Запуск за 7 дней</div>
         <h1 class="hero__title">
-          Личный  сайт + CRM система<br>
+          Личный сайт + CRM система<br />
           <span class="hero__highlight">для ресторана</span>
         </h1>
         <p class="hero__subtitle">
-          Запустите онлайн-продажи за 7 дня. Современный дизайн, мгновенная загрузка,
-          полный контроль заказов  в одной системе.
+          Запустите онлайн-продажи за 7 дня. Современный дизайн, мгновенная загрузка, полный
+          контроль заказов в одной системе.
         </p>
         <div class="hero__actions">
           <button class="btn btn--primary btn--large" @click="scrollToSection('contact')">
@@ -227,27 +230,38 @@ const {
       <div class="container">
         <div class="section__header">
           <span class="section__badge">Возможности</span>
-          <h2 class="section__title">Всё, что нужно для <span class="text-gradient">прибыльной доставки</span></h2>
-          <p class="section__subtitle">Полный набор инструментов для управления рестораном онлайн</p>
+          <h2 class="section__title">
+            Всё, что нужно для <span class="text-gradient">прибыльной доставки</span>
+          </h2>
+          <p class="section__subtitle">
+            Полный набор инструментов для управления рестораном онлайн
+          </p>
         </div>
         <div class="features-grid">
-          <div v-for="(feature, i) in features" :key="i" class="feature-card" :style="{ '--delay': `${i * 0.1}s` }">
-            <img :src="feature.icon" alt="" style="width: 100%; height: 100%; object-fit: contain" />
-                   </div>
+          <div
+            v-for="(feature, i) in features"
+            :key="i"
+            class="feature-card"
+            :style="{ '--delay': `${i * 0.1}s` }"
+          >
+            <img
+              :src="feature.icon"
+              alt=""
+              style="width: 100%; height: 100%; object-fit: contain"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Demo Section -->
     <section id="demo" class="section">
       <div class="container">
         <div class="demo">
           <div class="demo__content">
             <span class="section__badge">Интерфейс</span>
-            <h2 class="section__title">Мощная админ-панель<br>в вашем браузере</h2>
+            <h2 class="section__title">Мощная админ-панель<br />в вашем браузере</h2>
             <p class="section__subtitle">
-              Управляйте меню, заказами, акциями, промокодами
-              сами, без ограничений
+              Управляйте меню, заказами, акциями, промокодами сами, без ограничений
             </p>
             <ul class="demo__list">
               <li class="demo__item">
@@ -271,9 +285,7 @@ const {
           <div class="demo__visual">
             <div class="browser-mockup">
               <div class="browser-mockup__header">
-                <div class="browser-mockup__dots">
-                  <span></span><span></span><span></span>
-                </div>
+                <div class="browser-mockup__dots"><span></span><span></span><span></span></div>
                 <div class="browser-mockup__url">admin.restopro.dev</div>
               </div>
               <div class="browser-mockup__content">
@@ -325,18 +337,24 @@ const {
       </div>
     </section>
 
-    <!-- Pricing -->
     <section id="pricing" class="section section--gradient">
       <div class="container">
         <div class="section__header">
           <span class="section__badge">Стоимость</span>
-          <h2 class="section__title">Мы продаём вам личный, <span class="text-gradient">готовый продукт.</span>
-            </h2>
-          <p class="section__subtitle"> Который можно гибко развивать далее
-            с нами, или любыми другими подрядчиками</p>
+          <h2 class="section__title">
+            Мы продаём вам личный, <span class="text-gradient">готовый продукт.</span>
+          </h2>
+          <p class="section__subtitle">
+            Который можно гибко развивать далее с нами, или любыми другими подрядчиками
+          </p>
         </div>
         <div class="pricing-grid">
-          <div v-for="plan in pricing" :key="plan.name" class="pricing-card" :class="{ 'pricing-card--popular': plan.popular }">
+          <div
+            v-for="plan in pricing"
+            :key="plan.name"
+            class="pricing-card"
+            :class="{ 'pricing-card--popular': plan.popular }"
+          >
             <div v-if="plan.popular" class="pricing-card__badge">Газ</div>
             <h3 class="pricing-card__name">{{ plan.name }}</h3>
             <div class="pricing-card__price">{{ plan.price }}</div>
@@ -347,7 +365,12 @@ const {
                 {{ f }}
               </li>
             </ul>
-            <button class="btn " style="margin-top: auto" :class="plan.popular ? 'btn--primary' : 'btn--outline'" @click="scrollToSection('contact')">
+            <button
+              class="btn"
+              style="margin-top: auto"
+              :class="plan.popular ? 'btn--primary' : 'btn--outline'"
+              @click="scrollToSection('contact')"
+            >
               Выбрать тариф
             </button>
           </div>
@@ -355,32 +378,64 @@ const {
       </div>
     </section>
 
-    <!-- FAQ -->
-<!--    <section id="faq" class="section section&#45;&#45;dark">-->
-<!--      <div class="container">-->
-<!--        <div class="section__header">-->
-<!--          <span class="section__badge">FAQ</span>-->
-<!--          <h2 class="section__title">Частые <span class="text-gradient">вопросы</span></h2>-->
-<!--        </div>-->
-<!--        <div class="faq-list">-->
-<!--          <div v-for="(faq, i) in faqs" :key="i" class="faq-item" :class="{ 'faq-item&#45;&#45;active': activeFaq === i }">-->
-<!--            <button class="faq-item__question" @click="toggleFaq(i)">-->
-<!--              <span>{{ faq.q }}</span>-->
-<!--              <span class="faq-item__icon">{{ activeFaq === i ? '−' : '+' }}</span>-->
-<!--            </button>-->
-<!--            <div class="faq-item__answer" :style="{ maxHeight: activeFaq === i ? '200px' : '0' }">-->
-<!--              <p>{{ faq.a }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </section>-->
+    <section id="case" class="section section--dark">
+      <div class="container">
+        <span class="section__badge" style="margin-bottom: 0">Кейсы</span>
 
-    <!-- Contact CTA -->
+        <div class="case-flex">
+          <div class="case-card case-card-text">
+            <div class="section__title-da">
+              Как будет выглядеть ваш сайт и <span class="text-gradient">CRM система</span>
+            </div>
+
+            <ul class="demo__list">
+              <li class="demo__item">
+                <span class="demo__check">✓</span>
+                <span>
+                  Отточенный на практике эффективный интерфейс, который клиенты любят и понимают.
+                  Интуитивно понятная навигация и быстрый процесс оформления</span
+                >
+              </li>
+              <li class="demo__item">
+                <span class="demo__check">✓</span>
+                <span> Управляйте баннерами и акциями </span>
+              </li>
+              <li class="demo__item">
+                <span class="demo__check">✓</span>
+                <span> Создавайте промокоды и тестируйте свои гипотезы </span>
+              </li>
+              <li class="demo__item">
+                <span class="demo__check">✓</span>
+                <span>Быстрая бесперебойная работа</span>
+              </li>
+            </ul>
+          </div>
+          <div class="case-card">
+            <img :src="casePhoto1" alt="FreshBite" />
+          </div>
+          <div class="case-card">
+            <img :src="casePhoto2" alt="FreshBite" />
+          </div>
+          <div class="case-card">
+            <img :src="casePhoto3" alt="FreshBite" />
+          </div>
+        </div>
+
+        <!--        <div class="case-flex">-->
+        <!--          <div class="case-card">-->
+        <!--            asd-->
+        <!--          </div>-->
+        <!--          <div class="case-card">-->
+        <!--            asd-->
+        <!--          </div>-->
+        <!--        </div>-->
+      </div>
+    </section>
+
     <section id="contact" class="section cta">
       <div class="container">
         <div class="cta__inner">
-          <h2 class="cta__title">Готовы увеличить прибыль с доставки<br>на 40%-60% ?</h2>
+          <h2 class="cta__title">Готовы увеличить прибыль с доставки<br />на 40%-60% ?</h2>
 
           <form class="cta__form" @submit.prevent="sendMessage">
             <input
@@ -391,11 +446,36 @@ const {
               autocomplete="off"
               aria-hidden="true"
               style="position: absolute; left: -9999px; opacity: 0"
+            />
+            <input
+              type="text"
+              placeholder="Ваше имя"
+              class="cta__input"
+              required
+              v-model="name"
+              :disabled="isLoading"
+            />
+            <input
+              type="tel"
+              placeholder="Телефон"
+              class="cta__input"
+              required
+              v-model="phone"
+              :disabled="isLoading"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              class="cta__input"
+              required
+              v-model="email"
+              :disabled="isLoading"
+            />
+            <button
+              type="submit"
+              class="btn btn--primary btn--large btn--full"
+              :disabled="isLoading"
             >
-            <input type="text" placeholder="Ваше имя" class="cta__input" required v-model="name" :disabled="isLoading">
-            <input type="tel" placeholder="Телефон" class="cta__input" required v-model="phone" :disabled="isLoading">
-            <input type="email" placeholder="Email" class="cta__input" required v-model="email" :disabled="isLoading">
-            <button type="submit" class="btn btn--primary btn--large btn--full" :disabled="isLoading">
               Оставить заявку
               <span class="btn__arrow">→</span>
             </button>
@@ -403,71 +483,65 @@ const {
           <p class="cta__note">🔒 Ваши данные в безопасности.</p>
 
           <div v-if="isError" style="color: #ff5f57">Произошла ошибка попробуйте позже :(</div>
-        <div v-if="isSend"  style="color: #28c840">Ваша заявка успешно отправлена, ожидайте</div>
+          <div v-if="isSend" style="color: #28c840">Ваша заявка успешно отправлена, ожидайте</div>
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-<!--    <footer class="footer">-->
-<!--      <div class="container">-->
-<!--        <div class="footer__grid">-->
-<!--          <div class="footer__brand">-->
-<!--            <a href="#" class="logo">-->
-<!--              <span class="logo__icon">🍕</span>-->
-<!--              <span class="logo__text">Resto<span class="logo__accent">Pro</span></span>-->
-<!--            </a>-->
-<!--            <p class="footer__desc">-->
-<!--              Готовые решения для ресторанов доставки.-->
-<!--              Современные технологии, быстрый запуск, реальные результаты.-->
-<!--            </p>-->
-<!--          </div>-->
-<!--          <div class="footer__links">-->
-<!--            <h4>Продукт</h4>-->
-<!--            <a @click.prevent="scrollToSection('features')">Возможности</a>-->
-<!--            <a @click.prevent="scrollToSection('pricing')">Тарифы</a>-->
-<!--            <a @click.prevent="scrollToSection('demo')">Демо</a>-->
-<!--          </div>-->
-<!--          <div class="footer__links">-->
-<!--            <h4>Компания</h4>-->
-<!--            <a href="#">О нас</a>-->
-<!--            <a href="#">Блог</a>-->
-<!--            <a href="#">Контакты</a>-->
-<!--          </div>-->
-<!--          <div class="footer__links">-->
-<!--            <h4>Поддержка</h4>-->
-<!--            <a href="#">Документация</a>-->
-<!--            <a href="#">API</a>-->
-<!--            <a href="#">Статус</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="footer__bottom">-->
-<!--          <p>© 2026 RestoPro. Все права защищены.</p>-->
-<!--          <div class="footer__social">-->
-<!--            <a href="#" aria-label="Telegram">📱</a>-->
-<!--            <a href="#" aria-label="WhatsApp">💬</a>-->
-<!--            <a href="#" aria-label="Email">✉️</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </footer>-->
   </div>
 </template>
 
 <style>
+.case-flex {
+  display: grid;
+  /* Будет создано 3 колонки */
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 960px) {
+  .case-flex {
+    grid-template-columns: 1fr;
+  }
+}
+.case-card {
+  margin-top: 20px;
+  border-radius: 30px;
+}
+.case-card-text {
+  padding: 30px;
+  background: var(--color-bg);
+}
+.case-card img {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+}
+.section__title-da {
+  font-size: 30px;
+  font-weight: bold;
+}
+.da-text {
+  margin-top: 8px;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
 /* ===== CSS VARIABLES ===== */
 :root {
   --color-bg: #0a0a0f;
   --color-bg-elevated: #12121a;
   --color-bg-card: #1a1a25;
-  --color-primary: #FF6B35;
-  --color-primary-hover: #FF8555;
+  --color-primary: #ff6b35;
+  --color-primary-hover: #ff8555;
   --color-secondary: #6366f1;
   --color-text: #f1f1f4;
   --color-text-muted: #9ca3af;
   --color-border: rgba(255, 255, 255, 0.1);
-  --gradient-hero: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #6366f1 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,107,53,0.1) 0%, rgba(99,102,241,0.05) 100%);
+  --gradient-hero: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #6366f1 100%);
+  --gradient-card: linear-gradient(
+    145deg,
+    rgba(255, 107, 53, 0.1) 0%,
+    rgba(99, 102, 241, 0.05) 100%
+  );
   --shadow-glow: 0 0 40px rgba(255, 107, 53, 0.3);
   --radius: 16px;
   --radius-sm: 8px;
@@ -477,7 +551,9 @@ const {
 }
 
 /* ===== RESET & BASE ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -489,7 +565,8 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -677,16 +754,16 @@ body {
   position: absolute;
   inset: 0;
   background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 107, 53, 0.15), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(99, 102, 241, 0.1), transparent);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 107, 53, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(99, 102, 241, 0.1), transparent);
 }
 
 .hero__pattern {
   position: absolute;
   inset: 0;
   background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
 }
@@ -808,7 +885,12 @@ body {
 }
 
 .section--gradient {
-  background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-elevated) 50%, var(--color-bg) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-bg) 0%,
+    var(--color-bg-elevated) 50%,
+    var(--color-bg) 100%
+  );
 }
 
 .section__header {
@@ -848,7 +930,7 @@ body {
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  //align-items: ;
+  //align-items:;
   gap: 24px;
 }
 
@@ -861,7 +943,6 @@ body {
   transition: var(--transition);
   position: relative;
   overflow: hidden;
-
 }
 
 .feature-card::before {
@@ -972,9 +1053,15 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.browser-mockup__dots span:first-child { background: #ff5f57; }
-.browser-mockup__dots span:nth-child(2) { background: #febc2e; }
-.browser-mockup__dots span:nth-child(3) { background: #28c840; }
+.browser-mockup__dots span:first-child {
+  background: #ff5f57;
+}
+.browser-mockup__dots span:nth-child(2) {
+  background: #febc2e;
+}
+.browser-mockup__dots span:nth-child(3) {
+  background: #28c840;
+}
 
 .browser-mockup__url {
   flex: 1;
@@ -1120,7 +1207,7 @@ body {
 
 .pricing-card--popular {
   border-color: var(--color-primary);
-  background: linear-gradient(145deg, rgba(255,107,53,0.1) 0%, var(--color-bg-card) 100%);
+  background: linear-gradient(145deg, rgba(255, 107, 53, 0.1) 0%, var(--color-bg-card) 100%);
   transform: scale(1.05);
   z-index: 1;
 }
@@ -1244,7 +1331,7 @@ body {
 
 /* ===== CTA ===== */
 .cta {
-  background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(99,102,241,0.1) 100%);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -1256,7 +1343,7 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
   animation: pulse 4s ease-in-out infinite;
 }
 
@@ -1395,13 +1482,26 @@ body {
 }
 
 @keyframes scrollWheel {
-  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 /* ===== RESPONSIVE ===== */
@@ -1526,4 +1626,3 @@ html {
   scroll-padding-top: 80px;
 }
 </style>
-
