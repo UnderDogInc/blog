@@ -75,6 +75,10 @@ function openPicker() {
         />
       </div>
 
+      <span class="text-gray-500/75 text-xs">
+        <strong>*подсказка:</strong> максимальное разрешение карточки блога
+        <strong>333x186</strong> максимальное разрешение preview в статье <strong>670х377</strong>
+      </span>
       <span v-if="errors.preview" class="text-error text-xs">{{ errors.preview }}</span>
     </div>
   </div>

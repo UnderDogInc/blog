@@ -20,6 +20,17 @@ defineEmits<{
         <label class="form-control w-full block">
           <span class="label-text font-medium mb-1.5 block">Meta title</span>
           <input v-model="form.metaTitle" class="input input-bordered w-full rounded-xl" />
+          <span class="text-gray-500/75 text-xs">
+            *Этот title невидимый. Что в нем должно быть?
+            <a
+              class="underline"
+              href="https://blog.ringostat.com/ru/kak-pravilno-napisat-meta-tegi-title-description-keywords/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              клик сюда
+            </a>
+          </span>
         </label>
 
         <label class="form-control w-full block">
