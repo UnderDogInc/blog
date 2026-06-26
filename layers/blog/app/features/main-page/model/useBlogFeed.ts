@@ -7,9 +7,11 @@ export function useBlogFeed() {
   const route = useRoute()
   const router = useRouter()
 
-  const { data: categoriesData } = useApiFetch<ApiListData<PostCategory>>('categories', {
-    query: { limit: 100 }
-  })
+  const { data: categoriesData } = useApiData<ApiListData<PostCategory>>(
+    'blog-categories',
+    'categories',
+    { query: { limit: 100 } }
+  )
 
   const categories = computed(() => categoriesData.value?.items ?? [])
 
@@ -64,19 +66,29 @@ export function useBlogFeed() {
     return params
   })
 
-  const { data, pending } = useApiFetch<ApiListData<Post>>('posts', {
-    query: postsQuery,
-    watch: [postsQuery]
-  })
+  const postsFetchKey = computed(
+    () => `blog-posts:p${currentPage.value}:c${activeCategoryId.value ?? 'all'}`
+  )
 
-  const hasLoadedOnce = ref(false)
-  const lastPosts = shallowRef<ApiListData<Post>>({ items: [], total: 0, totalPages: 0 })
+  const { data, pending } = useApiData<ApiListData<Post>>(
+    postsFetchKey,
+    'posts',
+    {
+      query: postsQuery,
+      watch: [postsQuery]
+    }
+  )
+
+  const lastPosts = useState<ApiListData<Post>>('blog-feed-posts', () => ({
+    items: [],
+    total: 0,
+    totalPages: 0
+  }))
 
   watch(
     data,
     (value) => {
       if (value) {
-        hasLoadedOnce.value = true
         lastPosts.value = value
       }
     },
@@ -100,7 +112,7 @@ export function useBlogFeed() {
   })
 
   const postsData = computed(() => {
-    const source = data.value ?? (isRefreshing.value ? lastPosts.value : null)
+    const source = data.value ?? lastPosts.value
 
     return {
       posts: source?.items ?? [],

@@ -1,13 +1,16 @@
 import type { ApiEnvelope } from '#shared/types/api'
+import { resolveApiBase } from '#shared/lib/resolveApiBase'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
 
   const api = $fetch.create({
-    baseURL: config.public.apiBase,
     credentials: 'include',
     headers: {
       Accept: 'application/json'
+    },
+    onRequest({ options }) {
+      options.baseURL = resolveApiBase(useRuntimeConfig(), import.meta.server)
     },
     onResponse({ response }) {
       const body = response._data

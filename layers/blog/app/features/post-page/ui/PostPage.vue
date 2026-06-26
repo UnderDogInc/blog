@@ -4,23 +4,20 @@ import PostHeader from './PostHeader.vue'
 import type { Post } from '~/entities/post'
 import { useBlogPostSeo } from '../model/useBlogPostSeo'
 
-const route = useRoute()
-const postId = computed(() => String(route.params.id))
+interface PostPageProps {
+  post: Post | null
+  pending: boolean
+  error: Error | null
+}
 
-const {
-  data: post,
-  pending,
-  error
-} = await useApiFetch<Post>(() => `posts/${postId.value}`, {
-  watch: [postId]
-})
+const props = defineProps<PostPageProps>()
 
 const toMediaUrl = useResolveMediaUrl()
 
-const lcpPreviewUrl = computed(() => toMediaUrl(post.value?.preview))
+const lcpPreviewUrl = computed(() => toMediaUrl(props.post?.preview))
 
 useLcpImagePreload(lcpPreviewUrl)
-useBlogPostSeo(computed(() => post.value ?? null))
+useBlogPostSeo(computed(() => props.post ?? null))
 </script>
 
 <template>

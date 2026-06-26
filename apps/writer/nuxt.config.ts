@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url'
 import { defineNuxtConfig } from 'nuxt/config'
 import tailwindcss from '@tailwindcss/vite'
+import { nestDevProxy } from '../../scripts/nestDevProxy'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -35,16 +36,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    devProxy: {
-      '/api': {
-        target: process.env.NUXT_API_PROXY_TARGET || 'http://localhost:4000',
-        changeOrigin: true
-      },
-      '/assets': {
-        target: process.env.NUXT_API_PROXY_TARGET || 'http://localhost:4000',
-        changeOrigin: true
-      }
-    }
+    devProxy: nestDevProxy
   },
 
   app: {

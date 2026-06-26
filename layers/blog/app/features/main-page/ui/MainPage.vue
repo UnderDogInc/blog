@@ -54,10 +54,27 @@ useLcpImagePreload(aboveFoldPreviews)
       :empty-title="emptyState.title"
       :empty-description="emptyState.description"
     >
+      <template v-if="postsData.posts.length >= 3" #featured="{ post }">
+        <NuxtLink
+          :to="`/post/${post.id}`"
+          class="block h-full w-full min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
+        >
+          <UiCard
+            featured
+            :title="post.title"
+            :description="post.description"
+            :category="post.category?.name"
+            :preview="toMediaUrl(post.preview)"
+            :date="post.createdAt"
+            :priority="!isRefreshing"
+          />
+        </NuxtLink>
+      </template>
+
       <template #list="{ post, index }">
         <NuxtLink
           :to="`/post/${post.id}`"
-          class="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
+          class="block h-full w-full min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
         >
           <UiCard
             :title="post.title"

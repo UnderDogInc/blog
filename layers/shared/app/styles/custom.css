@@ -37,25 +37,28 @@ body {
 .post-feed-grid {
   display: grid;
   width: 100%;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+  gap: clamp(1rem, 2vw, 2rem);
   align-items: stretch;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.post-feed-grid--one,
+.post-feed-grid--two {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 @media (min-width: 640px) {
   .post-feed-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-@media (min-width: 1024px) {
-  .post-feed-grid {
-    gap: 2rem;
+  .post-feed-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1280px) {
-  .post-feed-grid {
+  .post-feed-grid:not(.post-feed-grid--one):not(.post-feed-grid--two) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

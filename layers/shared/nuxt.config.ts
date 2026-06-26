@@ -65,6 +65,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    apiProxyTarget: process.env.NUXT_API_PROXY_TARGET || '',
     contactForm: {
       smtpHost: process.env.NUXT_CONTACT_SMTP_HOST || 'smtp.yandex.ru',
       smtpPort: Number(process.env.NUXT_CONTACT_SMTP_PORT || 465),

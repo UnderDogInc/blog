@@ -13,9 +13,9 @@ withDefaults(
 
 <template>
   <ul class="post-feed-grid" aria-label="Загрузка статей">
-    <li v-for="n in length" :key="n" class="h-full">
+    <li v-for="n in length" :key="n" class="h-full min-w-0">
       <div
-        class="card bg-base-100 h-full border border-base-300/60 shadow-sm overflow-hidden rounded-2xl"
+        class="card w-full bg-base-100 h-full border border-base-300/60 shadow-sm overflow-hidden rounded-2xl"
       >
         <div class="skeleton aspect-video w-full shrink-0" />
         <div class="card-body gap-3 p-5 lg:p-6 flex flex-col flex-1">
