@@ -13,6 +13,11 @@ import TableRow from '@tiptap/extension-table-row'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
+import { uploadPostAsset } from '../model/uploadPostAsset'
+import {
+  POST_IMAGE_ACCEPT,
+  validatePostImageFile
+} from '../model/validatePostImage'
 
 const model = defineModel<string>({ default: '' })
 
@@ -27,16 +32,12 @@ const fileInputRef = ref<HTMLInputElement | null>(null)
 const editorDragDepth = ref(0)
 const isEditorDragOver = computed(() => editorDragDepth.value > 0)
 
-async function uploadFile(file: File) {
-  const body = new FormData()
-  body.append('file', file)
-
-  const result = await api<{ fileName: string }>('/files/upload', { method: 'POST', body })
-  return `/assets/${result.fileName}`
+function isImageCandidate(file: File) {
+  return file.type.startsWith('image/') || /\.(webp|avif)$/i.test(file.name)
 }
 
 async function insertImagesFromFiles(currentEditor: Editor, files: File[], pos?: number) {
-  const imageFiles = files.filter((file) => file.type.startsWith('image/'))
+  const imageFiles = files.filter(isImageCandidate)
 
   if (imageFiles.length === 0) {
     return
@@ -45,8 +46,15 @@ async function insertImagesFromFiles(currentEditor: Editor, files: File[], pos?:
   let insertPos = pos
 
   for (const file of imageFiles) {
+    const validationError = validatePostImageFile(file)
+
+    if (validationError) {
+      emit('error', validationError)
+      break
+    }
+
     try {
-      const path = await uploadFile(file)
+      const path = await uploadPostAsset(api, file)
       const src = toMediaUrl(path)
 
       if (typeof insertPos === 'number') {
@@ -110,7 +118,6 @@ const editor = useEditor({
       placeholder: 'Ну пиши…'
     }),
     FileHandler.configure({
-      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'],
       onDrop: (currentEditor, files, pos) => {
         void insertImagesFromFiles(currentEditor, files, pos)
       },
@@ -443,7 +450,7 @@ onBeforeUnmount(() => {
         ref="fileInputRef"
         type="file"
         class="hidden"
-        accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+        :accept="POST_IMAGE_ACCEPT"
         @change="onImagePicked"
       />
     </div>

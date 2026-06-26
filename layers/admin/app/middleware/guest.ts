@@ -1,4 +1,4 @@
-import { useSession } from '~/entities/session'
+import { isAdmin, useSession } from '~/entities/session'
 
 export default defineNuxtRouteMiddleware(async () => {
   const { user, fetchUser } = useSession()
@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async () => {
     await fetchUser()
   }
 
-  if (user.value) {
+  if (user.value && isAdmin(user.value)) {
     return navigateTo('/')
   }
 })

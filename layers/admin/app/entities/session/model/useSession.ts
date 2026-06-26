@@ -1,7 +1,5 @@
-type User = {
-  id: number
-  phone: string
-}
+import type { User } from './types'
+import { isAdmin } from './types'
 
 export const useSession = () => {
   const api = useApi()
@@ -23,16 +21,41 @@ export const useSession = () => {
     }
   }
 
-  async function logout() {
-    await api('/session/logout', { method: 'POST' })
+  async function clearSession() {
+    try {
+      await api('/session/logout', { method: 'POST' })
+    } catch {
+      // Сессия могла уже истечь
+    }
+
     user.value = null
+  }
+
+  async function logout() {
+    await clearSession()
     await navigateTo('/login')
+  }
+
+  async function requireAdmin() {
+    if (!user.value) {
+      await fetchUser()
+    }
+
+    if (!user.value || !isAdmin(user.value)) {
+      await logout()
+      return false
+    }
+
+    return true
   }
 
   return {
     user,
     loading,
     fetchUser,
-    logout
+    clearSession,
+    logout,
+    requireAdmin,
+    isAdmin: computed(() => isAdmin(user.value))
   }
 }

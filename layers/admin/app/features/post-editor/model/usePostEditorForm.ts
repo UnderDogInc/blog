@@ -3,6 +3,7 @@ import type { Category } from '~/entities/category'
 import type { PostDetails, PostEditorOptions, PostPayload, PostSelectItem } from '~/entities/post'
 
 import { uploadPostAsset } from './uploadPostAsset'
+import { validatePostImageFile } from './validatePostImage'
 import { validatePostForm } from './validation'
 
 export function usePostEditorForm(options: PostEditorOptions) {
@@ -153,6 +154,14 @@ export function usePostEditorForm(options: PostEditorOptions) {
       return
     }
 
+    const validationError = validatePostImageFile(file)
+
+    if (validationError) {
+      validationErrors.value.preview = validationError
+      target.value = ''
+      return
+    }
+
     previewUploading.value = true
     submitError.value = ''
 
@@ -160,7 +169,9 @@ export function usePostEditorForm(options: PostEditorOptions) {
       form.preview = await uploadPostAsset(api, file)
       validationErrors.value.preview = ''
     } catch (error) {
-      submitError.value = getApiErrorMessage(error, 'Не удалось загрузить превью')
+      const message = getApiErrorMessage(error, 'Не удалось загрузить превью')
+      validationErrors.value.preview = message
+      submitError.value = message
     } finally {
       previewUploading.value = false
       target.value = ''

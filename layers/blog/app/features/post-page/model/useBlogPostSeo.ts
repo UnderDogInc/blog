@@ -1,18 +1,15 @@
 import type { Post } from '~/entities/post'
-import { DEFAULT_DESCRIPTION, SITE_NAME } from '../../../shared/seo/constants'
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from '../../../shared/seo/constants'
 import { buildBlogPostingJsonLd, buildPublisher } from '../../../shared/seo/json-ld'
-import { resolveOgImage, resolveSiteOrigin } from '../../../shared/seo/resolveSeo'
+import { resolveSeoImage, useSiteOrigin } from '../../../shared/seo/resolveSeo'
 
 export function useBlogPostSeo(
   post: ComputedRef<Post | null | undefined>
 ) {
-  const config = useRuntimeConfig()
   const route = useRoute()
   const toMediaUrl = useResolveMediaUrl()
 
-  const siteOrigin = computed(() =>
-    resolveSiteOrigin(config.public.siteUrl, config.public.blogUrl)
-  )
+  const siteOrigin = useSiteOrigin()
 
   const pageUrl = computed(() => `${siteOrigin.value}/post/${route.params.id}`)
 
@@ -27,7 +24,7 @@ export function useBlogPostSeo(
   const ogImage = computed(() => {
     const preview = post.value?.preview
     const fromPost = preview ? toMediaUrl(preview) : undefined
-    return resolveOgImage(fromPost, siteOrigin.value)
+    return resolveSeoImage(fromPost ?? preview, siteOrigin.value, DEFAULT_OG_IMAGE)
   })
 
   const jsonLd = computed(() => {

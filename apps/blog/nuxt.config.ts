@@ -26,7 +26,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       app: 'blog',
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      siteUrl:
+        process.env.NUXT_PUBLIC_BLOG_SITE_URL
+        || process.env.NUXT_PUBLIC_SITE_URL
+        || process.env.NUXT_PUBLIC_BLOG_URL,
       blogUrl: process.env.NUXT_PUBLIC_BLOG_URL,
       writerUrl: process.env.NUXT_PUBLIC_WRITER_URL,
       apiBase: process.env.NUXT_PUBLIC_API_BASE

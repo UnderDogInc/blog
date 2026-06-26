@@ -1,10 +1,10 @@
 import type { Post } from '~/entities/post'
-import { DEFAULT_DESCRIPTION, SITE_NAME } from '../../../shared/seo/constants'
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from '../../../shared/seo/constants'
 import {
   buildItemListJsonLd,
   buildWebSiteJsonLd
 } from '../../../shared/seo/json-ld'
-import { resolveOgImage, resolveSiteOrigin } from '../../../shared/seo/resolveSeo'
+import { resolveSeoImage, useSiteOrigin } from '../../../shared/seo/resolveSeo'
 
 export function useBlogIndexSeo(options: {
   activeCategory: ComputedRef<{ name: string; key: string } | null>
@@ -12,12 +12,9 @@ export function useBlogIndexSeo(options: {
   posts: ComputedRef<Post[]>
 }) {
   const route = useRoute()
-  const config = useRuntimeConfig()
   const toMediaUrl = useResolveMediaUrl()
 
-  const siteOrigin = computed(() =>
-    resolveSiteOrigin(config.public.siteUrl, config.public.blogUrl)
-  )
+  const siteOrigin = useSiteOrigin()
 
   const title = computed(() => {
     const parts: string[] = []
@@ -62,7 +59,7 @@ export function useBlogIndexSeo(options: {
   const ogImage = computed(() => {
     const preview = options.posts.value[0]?.preview
     const fromPost = preview ? toMediaUrl(preview) : undefined
-    return resolveOgImage(fromPost, siteOrigin.value)
+    return resolveSeoImage(fromPost ?? preview, siteOrigin.value, DEFAULT_OG_IMAGE)
   })
 
   const jsonLd = computed(() => {

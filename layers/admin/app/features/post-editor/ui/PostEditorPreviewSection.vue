@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import type { PostPayload } from '~/entities/post'
+import {
+  POST_IMAGE_ACCEPT,
+  POST_IMAGE_MAX_BYTES,
+  formatImageSize
+} from '../model/validatePostImage'
 
 const previewInputRef = ref<HTMLInputElement | null>(null)
 
@@ -70,14 +75,15 @@ function openPicker() {
           ref="previewInputRef"
           type="file"
           class="hidden"
-          accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+          :accept="POST_IMAGE_ACCEPT"
           @change="emit('previewPicked', $event)"
         />
       </div>
 
       <span class="text-gray-500/75 text-xs">
-        <strong>*подсказка:</strong> максимальное разрешение карточки блога
-        <strong>333x186</strong> максимальное разрешение preview в статье <strong>670х377</strong>
+        <strong>*подсказка:</strong> только WebP или AVIF, до
+        {{ formatImageSize(POST_IMAGE_MAX_BYTES) }}. Рекомендуемое разрешение карточки
+        <strong>333×186</strong>, превью в статье <strong>670×377</strong>
       </span>
       <span v-if="errors.preview" class="text-error text-xs">{{ errors.preview }}</span>
     </div>
