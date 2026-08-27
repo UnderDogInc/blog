@@ -41,13 +41,14 @@ layers/
 
 Все app читают `.env` из **корня monorepo** (`vite.envDir` указывает на корень).
 
-| Переменная | Dev | Production                     |
-|------------|-----|--------------------------------|
-| `NUXT_PUBLIC_API_BASE` | `/api` | `https://api.domain.com/api`   |
-| `NUXT_API_PROXY_TARGET` | `http://localhost:4000` | не нужен                       |
-| `NUXT_PUBLIC_BLOG_URL` | `http://localhost:3000` | `https://blog.domain.com`   |
+| Переменная | Dev | Production                    |
+|------------|-----|-------------------------------|
+| `NUXT_PUBLIC_API_BASE` | `/api` | `/api` (через nginx) |
+| `NUXT_API_PROXY_TARGET` | `http://localhost:4000` | `http://127.0.0.1:4000` — SSR → Nest |
+| `NUXT_PUBLIC_API_ORIGIN` | `http://localhost:4000` | `https://api2.rassvet.click` — картинки |
+| `NUXT_PUBLIC_BLOG_URL` | `http://localhost:3000` | `https://blog.domain.com`  |
 | `NUXT_PUBLIC_WRITER_URL` | `http://localhost:3001` | `https://writer.domain.com` |
-| `NUXT_PUBLIC_SITE_URL` | см. ниже | canonical URL текущего app     |
+| `NUXT_PUBLIC_SITE_URL` | см. ниже | canonical URL текущего app    |
 
 `NUXT_PUBLIC_SITE_URL` при деплое задаётся **для каждого app отдельно** (в CI или `.env` на сервере):
 

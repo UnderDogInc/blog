@@ -32,7 +32,8 @@ export default defineNuxtConfig({
         || process.env.NUXT_PUBLIC_BLOG_URL,
       blogUrl: process.env.NUXT_PUBLIC_BLOG_URL,
       writerUrl: process.env.NUXT_PUBLIC_WRITER_URL,
-      apiBase: process.env.NUXT_PUBLIC_API_BASE
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,
+      yandexMetrikaId: process.env.NUXT_PUBLIC_YANDEX_METRIKA_ID || ''
     }
   },
 
